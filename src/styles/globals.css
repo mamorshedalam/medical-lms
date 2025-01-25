@@ -1,0 +1,203 @@
+@import "fonts.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  before-content::before {
+    content: "";
+  }
+
+  after-content::after {
+    content: "";
+  }
+
+  .w-fill-available {
+    width: -webkit-fill-available;
+  }
+
+  .h-fill-available {
+    height: -webkit-fill-available;
+  }
+
+  .skeleton-box {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    background-color: #dddbdd;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      /* transform: translateX(-100%); */
+      background-image: linear-gradient(
+        90deg,
+        rgba(#fff, 0) 0,
+        rgba(#fff, 0.2) 20%,
+        rgba(#fff, 0.5) 60%,
+        rgba(#fff, 0)
+      );
+      animation: shimmer 5s infinite;
+      content: "";
+    }
+
+    @keyframes shimmer {
+      100% {
+        /* transform: translateX(100%); */
+      }
+    }
+  }
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Hide the scrollbar by default and show it on hover */
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+.scroll-custom::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 2px;
+}
+
+.scroll-custom:hover:-webkit-scrollbar {
+  width: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.scroll-custom:hover::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 2px;
+}
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
+
+/* Data Table Style */
+.item-index font {
+  font-size: 6px;
+}
+
+div[data-tag="allowRowEvents"] {
+  width: 100%;
+  overflow: visible !important;
+}
+
+.draggable-item {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.slide-but * {
+  box-sizing: border-box;
+}
+.slide-but {
+  border: 2px solid #444;
+  min-width: 200px;
+  padding: 11px;
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  user-select: none;
+}
+.slide-but * {
+  pointer-events: none;
+  user-select: none;
+}
+.slide-but .slide-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  height: 100%;
+  width: 2rem;
+  background: #444;
+  transition: width 0.2s ease-out;
+  will-change: width;
+  overflow: hidden;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slide-but .slide-overlay .slide-overlay-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.slide-but .slide-overlay .slide-caret-wrapper {
+  position: absolute;
+  max-width: 45px;
+  min-width: 0;
+  right: 0;
+  top: 50%;
+  height: 100%;
+  transform: translateY(-50%);
+  background: #444;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: center;
+}
+.slide-but .slide-overlay .slide-overlay-txt {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.input-transition{
+  transition: border-color 0.3s ease-in-out;
+}
