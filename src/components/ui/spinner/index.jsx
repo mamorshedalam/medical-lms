@@ -2,9 +2,9 @@ import React from "react";
 
 const sizeVariants = {
   sm: "w-5 h-5",
-  md: "w-12 h-12",
-  lg: "w-16 h-16",
-  xl: "w-20 h-20"
+  md: "w-10 h-10",
+  lg: "w-12 h-12",
+  xl: "w-16 h-16"
 };
 
 const Spinner = ({ 
@@ -34,7 +34,7 @@ const Spinner = ({
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only text-gray-800">Loading...</span>
     </div>
   );
 };

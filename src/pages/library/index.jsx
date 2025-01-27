@@ -29,12 +29,12 @@ import QuestionsComponent from "@/components/ui/questions";
 const LibraryPage = () => {
   const authHttpClient = useAuthHttpClient();
   const { user } = useAuth();
-  const [activeTabIndex, setActiveTabIndex] = useState("matieres");
+  // const [activeTabIndex, setActiveTabIndex] = useState("matieres");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [materialsData, setMaterialsData] = useState([]);
+  // const [materialsData, setMaterialsData] = useState([]);
   const [libraryState, setLibraryState] = useAtom(libraryAtom);
 
-  const [itemsData, setItemsData] = useState([]);
+  // const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openNewMatiereModal, setOpenNewMatiereModal] = useState(false)
   const [openNewItemModal, setOpenNewItemModal] = useState(false);
@@ -58,18 +58,18 @@ const LibraryPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (authHttpClient) {
+        setLoading(true);
         try {
           const [res1, res2] = await Promise.all([
             authHttpClient.get("/matiere"),
             authHttpClient.get("/item"),
           ]);
-          // setMaterialsData(res1.data.data);
-          // setItemsData(res2.data.data);
           updateLibraryState({
             materialsAtom: res1.data.data,
             itemsAtom: res2.data.data,
             isRenderingData: false
           });
+          setLoading(false);
         } catch (err) {
           console.log(err);
         } finally {
@@ -87,7 +87,6 @@ const LibraryPage = () => {
     item.name.toLowerCase().includes(searchKeyword.toLowerCase())
   );
 
-  // console.log('libraryAtom :>> ', libraryState.materialsAtom);
   const filteredItems = libraryState.itemsAtom.filter((item) =>
     item.name.toLowerCase().includes(searchKeyword.toLowerCase())
   );
@@ -106,28 +105,28 @@ const LibraryPage = () => {
               icon={item.icon}
               key={`tab-nav-${index}`}
               text={item.name}
-              isActive={activeTabIndex === item.code}
+              isActive={libraryState.activeTabIndex === item.code}
               click={() => {
-                setActiveTabIndex(item.code);
+                updateLibraryState({
+                  activeTabIndex: item.code,
+                  isRenderingData: true
+                });
+                // setActiveTabIndex(item.code);
               }}
             />
           ))}
         </div>
         <div>
-          <TabPanel isActive={activeTabIndex === "matieres"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "matieres"}>
             <LibraryHeader
               buttonTitle="Add New Matières"
               searchKeyword={searchKeyword}
               setSearchKeyword={setSearchKeyword}
               buttonClick={() => setOpenNewMatiereModal(true)}
             />
-            {/* <SearchBox
-              keyword={searchKeyword}
-              keywordSetter={setSearchKeyword}
-            /> */}
             <div className="flex flex-col gap-[18px]">
               {loading ? (
-                <Spinner />
+                <Spinner size="md" />
               ) : (
                 filteredMaterials.map((item, index) => (
                   <MaterialCard key={`material-card-${index}`} data={item} />
@@ -135,7 +134,7 @@ const LibraryPage = () => {
               )}
             </div>
           </TabPanel>
-          <TabPanel isActive={activeTabIndex === "items"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "items"}>
             <LibraryHeader buttonTitle="Add New Item" searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} buttonClick={() => setOpenNewItemModal(true)}
             />
             <div className="flex flex-col gap-[18px]">
@@ -148,19 +147,19 @@ const LibraryPage = () => {
               )}
             </div>
           </TabPanel>
-          <TabPanel isActive={activeTabIndex === "cards"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "cards"}>
             <LibraryCard />
           </TabPanel>
-          <TabPanel isActive={activeTabIndex === "tags"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "tags"}>
             <Tags />
           </TabPanel>
-          <TabPanel isActive={activeTabIndex === "sessions"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "sessions"}>
             <Sessions />
           </TabPanel>
-          <TabPanel isActive={activeTabIndex === "dps"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "dps"}>
             <DPSComponent />
           </TabPanel>
-          <TabPanel isActive={activeTabIndex === "questions"}>
+          <TabPanel isActive={libraryState.activeTabIndex === "questions"}>
             <QuestionsComponent />
           </TabPanel>
         </div>

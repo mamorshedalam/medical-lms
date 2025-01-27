@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { Spinner } from "@/components/ui/Spinner";
+import Spinner from "@/components/ui/Spinner";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Combobox, Switch } from "@headlessui/react";
 import FileUpload from "@/components/ui/FileUpload";
 import useAuthHttpClient from "@/hooks/useAuthHttpClient";
+import { useRouter } from "next/navigation";
+import { updateLibraryState } from "@/store/store";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
-function AddNewQuestionPage() {
+const AddQuestionPage = () => {
+    const router = useRouter();
+
     const authHttpClient = useAuthHttpClient(true);
     // const { matieres, items, tags, sessions, cards } = useData();
     const [isLoading, setIsLoading] = useState(false);
@@ -234,6 +238,11 @@ function AddNewQuestionPage() {
                         : ""
                 ),
             }));
+            router.push('/library');
+            updateLibraryState({
+                activeTabIndex: "questions",
+                isRenderingData: true
+            });
         } catch (error) {
             setIsUploading(false);
             console.log(error);
@@ -1223,8 +1232,8 @@ function AddNewQuestionPage() {
                         type="button"
                         className="click-action inline-flex justify-between border border-gray-300 items-center gap-x-1.5 rounded-md bg-violet-600 text-white px-2.5 py-1.5 text-sm font-semibol focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:outline-violet-600"
                     >
-                         {isUploading && <Spinner small />}
-                         {isUploading ? "Submitting" : "Upload QI"}
+                        {isUploading && <Spinner small />}
+                        {isUploading ? "Submitting" : "Upload QI"}
                     </button>
                 </div>
             </div>
@@ -1232,4 +1241,4 @@ function AddNewQuestionPage() {
     );
 }
 
-export default AddNewQuestionPage;
+export default AddQuestionPage;

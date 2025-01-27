@@ -31,6 +31,7 @@ export const libraryAtom = atom({
   sessionAtom: [],
   dpsAtom: [],
   sessionAtom: [],
+  activeTabIndex: "matieres",
   isRenderingData: true,
 });
 

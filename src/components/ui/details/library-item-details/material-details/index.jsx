@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import TabNav from "@/components/ui/tabs/tab-nav";
 import TabPanel from "@/components/ui/tabs/tab-panel";
 
-import { materialsData } from "@/constants/mockup-data/library";
+import { materialsDummyData } from "@/constants/mockup-data/library";
 import DonutChartOne from "@/components/ui/chart/donut-chart-one";
 import DonutChartTwo from "@/components/ui/chart/donut-chart-two";
 import MaterialAvancementGlobalPanel from "./tab-panel/avancement-global-panel";
@@ -20,9 +20,9 @@ const MaterialDetails = () => {
   const { material } = router.query;
 
   useEffect(() => {
-    const index = materialsData.findIndex((item) => item.slug === material);
+    const index = materialsDummyData.findIndex((item) => item.slug === material);
     if (index > -1) {
-      setDetails(materialsData[index]);
+      setDetails(materialsDummyData[index]);
     }
   }, [material]);
 

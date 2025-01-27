@@ -37,7 +37,6 @@ export default function Input({
       p-3 
       my-2 
       ${isDisabled ? 'bg-gray-100' : 'bg-white'}
-      ${isCapitalize && type !== "email" ? 'capitalize' : 'lowercase'}
       `;
     }
 

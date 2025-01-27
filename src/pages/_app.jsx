@@ -6,6 +6,7 @@ import { appStore } from "@/store/store";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import MainComponent from "@/components/mainComponent";
 import { Auth0Provider } from "@auth0/auth0-react";
+import AuthGuard from "@/components/AuthGuard";
 
 function MyApp({ Component, pageProps }) {
 
@@ -18,12 +19,13 @@ function MyApp({ Component, pageProps }) {
         audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
       }}
       useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
-      <UserProvider>
-        <Provider store={appStore}>
+      <Provider store={appStore}>
+        <AuthGuard>
           <MainComponent Component={Component} pageProps={pageProps} />
-        </Provider>
-      </UserProvider>
+        </AuthGuard>
+      </Provider>
     </Auth0Provider>
 
   );

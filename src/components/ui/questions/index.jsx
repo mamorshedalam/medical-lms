@@ -1,21 +1,21 @@
 import useAuthHttpClient from '@/hooks/useAuthHttpClient';
-import { useData } from '@/providers/learningDataProvider';
-import { ChatBubbleLeftIcon, EllipsisVerticalIcon, ListBulletIcon, PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import LibraryHeader from '../libraryHeader';
-import AddTagModal from '../modals/library/AddTagModal';
-import VerticalDivider from '../vertical-divider';
-import EditIcon from '@/assets/icons/edit';
 import DeleteModal from '../modals/deleteModal';
 import { Toaster, ToastType } from '../toaster';
 import AddDPsModal from '../modals/library/AddDPsModal';
 import EditDPsModal from '../modals/library/EditDPsModal';
 import { useRouter } from 'next/navigation';
+import NoDataFound from '../NoDataFound';
+import { useAtom } from 'jotai';
+import { libraryAtom } from '@/store/store';
 
 const QuestionsComponent = () => {
     const router = useRouter();
-
     const authHttpClient = useAuthHttpClient();
+    const [libraryState, setLibraryState] = useAtom(libraryAtom);
+
     const [openNewModal, setOpenNewModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedData, setSelectedData] = useState(null);
@@ -25,7 +25,6 @@ const QuestionsComponent = () => {
     const [deleting, setDeleting] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
     const [isRendering, setIsRendering] = useState(true);
-
     const [matieres, setMatieres] = useState([]);
     const [items, setItems] = useState([]);
     const [sessions, setSessions] = useState([]);
@@ -53,10 +52,11 @@ const QuestionsComponent = () => {
                 }
             }
         };
-        if (isRendering) {
+
+        if (libraryState.isRenderingData) {
             fetchData();
         }
-    }, [isRendering]);
+    }, [libraryState.isRenderingDatas]);
 
 
     useEffect(() => {
@@ -82,7 +82,7 @@ const QuestionsComponent = () => {
         fetchData();
     }, []);
 
-    const handleDeleteDPs = async (e) => {
+    const handleDeleteQuestion = async (e) => {
         setDeleting(true);
         try {
             await authHttpClient.delete(`/question/${selectedData._id}`);
@@ -132,67 +132,58 @@ const QuestionsComponent = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                        {filteringData && filteringData.map((question) => (
-                            <tr key={question._id} className="even:bg-gray-50">
-                                <td className="font-extrabold py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 gap-2">
-                                    {question.question_number}
-                                </td>
-                                <td className=" px-3 py-4 text-sm text-gray-500">
-                                    {question.question}
-                                </td>
-                                <td className=" px-3 py-4 text-sm text-gray-500">
-                                    {
-                                        matieres.find(({ _id }) => _id === question.matiere_id)
-                                            ?.name
-                                    }
-                                </td>
+                        {filteringData.length === 0 ? (
+                            <NoDataFound colSpan={6} />
+                        ) : (
+                            filteringData.map((question) => (
+                                <tr key={question._id} className="even:bg-gray-50">
+                                    <td className="font-extrabold py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6 gap-2">
+                                        {question.question_number}
+                                    </td>
+                                    <td className=" px-3 py-4 text-sm text-gray-500">{question.question}</td>
+                                    <td className=" px-3 py-4 text-sm text-gray-500">
+                                        {matieres.find(({ _id }) => _id === question.matiere_id)?.name}
+                                    </td>
 
-                                <td className=" px-3 py-4 text-sm text-gray-500">
-                                    {question.item_id &&
-                                        `${items.find(({ _id }) => _id === question.item_id)
-                                            ?.item_number
-                                        }. ${items.find(({ _id }) => _id === question.item_id)
-                                            ?.name
-                                        }`}
-                                </td>
-                                <td className=" px-3 py-4 text-sm text-gray-500 w-1/4 whitespace-nowrap  max-w-xs flex-auto truncate ">
-                                    {question.session_id && (
-                                        <div
-                                            key={question.session_id}
-                                            className="px-2 m-1 max-w-fit border border-gray-400 rounded-md text-[12px]"
+                                    <td className=" px-3 py-4 text-sm text-gray-500">
+                                        {question.item_id &&
+                                            `${items.find(({ _id }) => _id === question.item_id)?.item_number}. ${items.find(({ _id }) => _id === question.item_id)?.name
+                                            }`}
+                                    </td>
+                                    <td className=" px-3 py-4 text-sm text-gray-500 w-1/4 whitespace-nowrap  max-w-xs flex-auto truncate ">
+                                        {question.session_id && (
+                                            <div
+                                                key={question.session_id}
+                                                className="px-2 m-1 max-w-fit border border-gray-400 rounded-md text-[12px]"
+                                            >
+                                                {sessions.find(({ _id }) => _id === question.session_id)?.name}
+                                            </div>
+                                        )}
+                                    </td>
+
+                                    <td className="inline-flex gap-2 text-sm font-medium sm:pr-6">
+                                        <button
+                                            href="#"
+                                            onClick={() => {
+                                                setSelectedData(question)
+                                                setOpenDeleteModal(true)
+                                            }}
+                                            className="text-red-600 hover:text-violet-900"
                                         >
-                                            {
-                                                sessions.find(
-                                                    ({ _id }) => _id === question.session_id
-                                                )?.name
-                                            }
-                                        </div>
-                                    )}
-                                </td>
-
-
-                                <td className="inline-flex gap-2 text-sm font-medium sm:pr-6">
-                                    <button
-                                        href="#"
-                                        onClick={() => {
-                                            setSelectedData(dp);
-                                            setOpenDeleteModal(true);
-                                        }}
-                                        className="text-red-600 hover:text-violet-900"
-                                    >
-                                        <TrashIcon className="w-5 h-5 stroke-2" />
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            editDP(dp._id);
-                                        }}
-                                        className="text-violet-600 hover:text-violet-900"
-                                    >
-                                        <PencilSquareIcon className="w-5 h-5 stroke-2" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                                            <TrashIcon className="w-5 h-5 stroke-2" />
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                editDP(question._id)
+                                            }}
+                                            className="text-violet-600 hover:text-violet-900"
+                                        >
+                                            <PencilSquareIcon className="w-5 h-5 stroke-2" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
@@ -202,11 +193,11 @@ const QuestionsComponent = () => {
                 setOpenModal={setOpenNewModal}
             />
             <DeleteModal
-                title="DPs"
+                title="Question"
                 openModal={openDeleteModal}
                 setOpenModal={setOpenDeleteModal}
                 isDeleting={deleting}
-                handleDelete={handleDeleteDPs}
+                handleDelete={handleDeleteQuestion}
             />
             <EditDPsModal
                 currentTag={selectedData}

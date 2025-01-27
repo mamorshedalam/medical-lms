@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import TabNav from "@/components/ui/tabs/tab-nav";
 import TabPanel from "@/components/ui/tabs/tab-panel";
 
-import { materialsData } from "@/constants/mockup-data/library";
+import { materialsDummyData } from "@/constants/mockup-data/library";
 import AllAnnalsPanel from "./tab-panel/all-annals-panel";
 import AnnalesItemsPanel from "./tab-panel/items-panel";
 import AnnalesMaterialPanel from "./tab-panel/material-panel";
@@ -18,7 +18,7 @@ const AnnalesDetails = () => {
   const { material } = router.query;
 
   useEffect(() => {
-    setDetails(materialsData[0]);
+    setDetails(materialsDummyData[0]);
   }, [material]);
 
   const tabs = [

@@ -144,7 +144,7 @@ export default function Home() {
                 Your day plan
               </div>
               <div className="h-[480px]">
-                <Calendar />
+                {/* <Calendar /> */}
               </div>
             </div>
           </div>

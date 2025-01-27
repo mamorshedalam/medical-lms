@@ -16,17 +16,20 @@ import DeleteModal from "../../modals/deleteModal";
 import useAuthHttpClient from "@/hooks/useAuthHttpClient";
 import { updateLibraryState } from "@/store/store";
 import { Toaster, ToastType } from "../../toaster";
+import EditMatiereModal from "../../modals/library/EditMatiereModal";
 
 const MaterialCard = ({ data }) => {
   const authHttpClient = useAuthHttpClient();
   const router = useRouter();
   const { user } = useAuth();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openEditModal, setOpenEditModal] = useState(false)
+  const [selectedData, setSelectedData] = useState(null);
 
   const [completed, setCompleted] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
   useEffect(() => {
     if (data.n_items === 0) {
@@ -107,7 +110,10 @@ const MaterialCard = ({ data }) => {
           user && user.role === "admin" && (
             <>
               <button
-                // onClick={editAction}
+                onClick={() => {
+                  setSelectedData(data);
+                  setOpenEditModal(true);
+                }}
                 type="button"
                 className="click-action inline-flex justify-between border border-gray-300 items-center gap-x-1.5 rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold hover:text-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:outline-primary-600"
               >
@@ -165,6 +171,11 @@ const MaterialCard = ({ data }) => {
         setOpenModal={setOpenDeleteModal}
         isDeleting={deleting}
         handleDelete={handleDeleteMaterial}
+      />
+      <EditMatiereModal
+        currentData={selectedData}
+        openModal={openEditModal}
+        setOpenModal={setOpenEditModal}
       />
     </div>
   );
