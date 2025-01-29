@@ -17,6 +17,7 @@ export const quizState = atom({
   name: "",
   flags: [],
   questions: [],
+  loadQuestions: [],
   rightSidebar: true,
   isExpanded: false,
   currentIndex: 0,
@@ -62,6 +63,16 @@ export const updateLibraryState = (updates) => {
     ...updates,
   });
 };
+
+
+export const updateQuizeState = (updates) => {
+  const currentState = appStore.get(quizState);
+  appStore.set(quizState, {
+    ...currentState,
+    ...updates,
+  });
+};
+
 
 
 const unsub1 = appStore.sub(location, () => {

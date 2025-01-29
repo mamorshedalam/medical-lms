@@ -3,7 +3,6 @@
 import { Provider } from "jotai";
 import "@/styles/globals.css";
 import { appStore } from "@/store/store";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
 import MainComponent from "@/components/mainComponent";
 import { Auth0Provider } from "@auth0/auth0-react";
 import AuthGuard from "@/components/AuthGuard";

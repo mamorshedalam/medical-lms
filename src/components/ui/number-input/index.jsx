@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const NumberInput = () => {
-  const [count, setCount] = useState(8);
+const NumberInput = ({ count = 0, setCount }) => {
 
   const increment = () => {
     setCount((prevCount) => prevCount + 1);

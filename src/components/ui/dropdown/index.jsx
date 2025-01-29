@@ -1,18 +1,17 @@
-import React, { useState, useRef } from "react";
-import * as cn from "classnames";
-import { useOutsideAlerter } from "@/utils/custom-hooks";
+import React, { useState, useRef } from "react"
+import * as cn from "classnames"
+import { useOutsideAlerter } from "@/utils/custom-hooks"
 
-const Dropdown = ({ className = "", options }) => {
-  const [opened, setOpened] = useState(false);
-  const [selected, setSelected] = useState([]);
-  const [keyword, setKeyword] = useState("");
-  const wrapperRef = useRef(null);
+const Dropdown = ({ className = "", options, selected = [], setSelected, placeholder = "Select Option" }) => {
+  const [opened, setOpened] = useState(false)
+  const [keyword, setKeyword] = useState("")
+  const wrapperRef = useRef(null)
 
-  useOutsideAlerter(wrapperRef, () => setOpened(false));
+  useOutsideAlerter(wrapperRef, () => setOpened(false))
 
   const removeItemHandler = (value) => {
-    setSelected(selected.filter((item) => item !== value));
-  };
+    setSelected(selected.filter((item) => item !== value))
+  }
 
   return (
     <div className={cn(["relative", className])} ref={wrapperRef}>
@@ -21,30 +20,29 @@ const Dropdown = ({ className = "", options }) => {
         className="flex justify-between w-full text-custom-dark text-xs bg-custom-semi-light-gray hover:border-primary border min-w-28 focus:outline-none font-semibold rounded-lg px-3 h-9 text-center items-center dark:bg-custom-gray dark:hover:bg-primary transition-all"
         onClick={() => setOpened(!opened)}
       >
-        {selected.length > 0 ? (
+        {selected && selected.length > 0 ? (
           <div className="flex gap-2 shadow-gray">
-            {selected.map((item, index) => (
-              <div
-                key={`selected-${index}`}
-                className="flex gap-1 border rounded-md px-2 py-1"
-              >
-                {options.find((option) => option.value === item) &&
-                  options.find((option) => option.value === item).name}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    removeItemHandler(item);
-                  }}
-                  className="w-4 h-4 rounded-md text-[10px] bg-custom-gray hover:bg-black text-white transition-all"
-                >
-                  X
-                </button>
-              </div>
-            ))}
+            {selected.map((item, index) => {
+              const selectedOption = options.find((option) => option.value === item)
+              return (
+                <div key={`selected-${index}`} className="flex gap-1 border rounded-md px-2 py-1">
+                  {selectedOption ? selectedOption.name : item}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      removeItemHandler(item)
+                    }}
+                    className="w-4 h-4 rounded-md text-[10px] bg-custom-gray hover:bg-black text-white transition-all"
+                  >
+                    X
+                  </button>
+                </div>
+              )
+            })}
           </div>
         ) : (
-          <span>Select Option</span>
+          <span>{placeholder}</span>
         )}
         <svg
           className="w-2.5 h-2.5 ms-3"
@@ -53,13 +51,7 @@ const Dropdown = ({ className = "", options }) => {
           fill="none"
           viewBox="0 0 10 6"
         >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="m1 1 4 4 4-4"
-          />
+          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
         </svg>
       </button>
 
@@ -78,9 +70,7 @@ const Dropdown = ({ className = "", options }) => {
             />
           </li>
           {options
-            .filter((item) =>
-              item.name.toLowerCase().includes(keyword.toLowerCase())
-            )
+            .filter((item) => item.name.toLowerCase().includes(keyword.toLowerCase()))
             .map((option, index) => (
               <li key={`checkbox-item-${index}`}>
                 <div className="flex items-center">
@@ -89,26 +79,20 @@ const Dropdown = ({ className = "", options }) => {
                     value={option.value}
                     className="w-4 h-4 text-blue-600 bg-gray-100 cursor-pointer border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                     onClick={() => {
-                      if (selected.includes(option.value)) {
-                        setSelected(
-                          selected.filter((item) => item !== option.value)
-                        );
-                      } else {
-                        setSelected([...selected, option.value]);
-                      }
+                      const newSelected = selected.includes(option.value)
+                        ? selected.filter((item) => item !== option.value)
+                        : [...selected, option.value]
+                      setSelected(newSelected)
                     }}
                     checked={selected.includes(option.value)}
                     readOnly
                   />
                   <span
                     onClick={() => {
-                      if (selected.includes(option.value)) {
-                        setSelected(
-                          selected.filter((item) => item !== option.value)
-                        );
-                      } else {
-                        setSelected([...selected, option.value]);
-                      }
+                      const newSelected = selected.includes(option.value)
+                        ? selected.filter((item) => item !== option.value)
+                        : [...selected, option.value]
+                      setSelected(newSelected)
                     }}
                     className="ms-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300 cursor-pointer"
                   >
@@ -120,7 +104,7 @@ const Dropdown = ({ className = "", options }) => {
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown
