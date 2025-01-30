@@ -19,11 +19,15 @@ import useAuthHttpClient from "@/hooks/useAuthHttpClient";
 import { Toaster, ToastType } from "../../toaster";
 import { useAuth } from "@/providers/authProvider";
 import Spinner from "../../spinner";
+import { useQuiz } from "@/hooks/useQuiz";
+import { useExam } from "@/providers/examProvider";
 
 const CustomTestModal = () => {
   const authHttpClient = useAuthHttpClient();
   const { user } = useAuth();
-
+  const { loadQuestions } = useQuiz();
+  const { setQuestions, showCreateTestModal, setShowCreateTestModal } =
+    useExam();
   const [libraryState, setLibraryState] = useAtom(libraryAtom);
   const [openState, setOpenState] = useAtom(modal); // Get the current state of the modal
   const [opened, setOpened] = useState(false);
@@ -136,15 +140,19 @@ const CustomTestModal = () => {
       Toaster(ToastType.SUCCESS, "Test exam created successfully!");
       setIsSubmitting(false);
 
-      updateQuizeState({
-        questions: response.data.data,
-        loadQuestions: fetchItem.data.data,
-      });
-      closeModal();
+      // updateQuizeState({
+      //   questions: response.data.data,
+      //   loadQuestions: fetchItem.data.data,
+      // });
+      // closeModal();
       if (modeExam) {
         router.push("/exam");
+        setQuestions(response.data.data);
+        setShowCreateTestModal(false);
       } else {
-        router.push("/quiz")
+        loadQuestions(response.data.data);
+        router.push("/quiz");
+        setShowCreateTestModal(false);
       }
     } catch (error) {
       setIsSubmitting(false);

@@ -1,15 +1,16 @@
 import { createContext, useContext, useState } from "react";
 import useAuthHttpClient from "../hooks/useAuthHttpClient";
-import { useAuth } from "./authProvider";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/providers/authProvider";
 import { useEffect } from "react";
 import { HttpStatusCode } from "axios";
 import { useQuiz } from "../hooks/useQuiz";
+import { useRouter } from "next/router";
 
 export const ExamContextProvider = (props) => {
-  const navigator = useNavigate();
+  const navigator = useRouter();
   const authHttpClient = useAuthHttpClient();
   const { user } = useAuth();
+  console.log('user :>> ', user);
   const [selectedDps, setSelectedDps] = useState([]); // only [_id]
   const [selectedQuestions, setSelectedQuestions] = useState([]); // only [_id]
   const [dps, setDps] = useState([]);
@@ -27,7 +28,7 @@ export const ExamContextProvider = (props) => {
 
   const quizProvider = useQuiz();
   const fetchReminder = async () => {
-    const response = await authHttpClient.get(`/history/savedExam/` + user._id);
+    const response = await authHttpClient.get(`/history/savedExam/` + 4564);
 
     if (!response.status == HttpStatusCode.Ok) {
       return;

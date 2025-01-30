@@ -40,7 +40,7 @@ const DragButton = ({ handler }) => {
           }
           setEventStarted(false);
         }}
-        className="draggable-item absolute flex justify-center items-center h-10 w-1/2 mx-1 shadow-lg rounded-[24px] bg-white group-hover:bg-primary group-hover:text-white transition-all"
+        className="draggable-item absolute flex justify-center items-center h-10 w-1/2 mx-1 shadow-lg border rounded-[24px] bg-white text-black group-hover:bg-primary group-hover:text-white transition-all"
         style={{ touchAction: "none", left: `${percent}px`, userSelect: "none" }}
       >
         <ArrowRightIcon width={20} />

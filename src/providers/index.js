@@ -5,9 +5,9 @@ import { DataProvider } from "./learningDataProvider";
 import { NotificationProvider } from "./notificationProvider";
 import { QuizContextProvider } from "./quizProvider";
 
-const Provider = (props) => {
+const RootProvider = (props) => {
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <QuizContextProvider>
         <DataProvider>
           <ExamContextProvider>
@@ -17,8 +17,8 @@ const Provider = (props) => {
           </ExamContextProvider>
         </DataProvider>
       </QuizContextProvider>
-    </AuthProvider>
+    // </AuthProvider>
   );
 };
 
-export default Provider;
+export default RootProvider;
