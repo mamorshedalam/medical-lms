@@ -34,7 +34,7 @@ const QuizLayout = ({ children }) => {
         "flex-row": !isRight,
       })}
     >
-      <QuizSidebar />
+      {/* <QuizSidebar /> */}
       <main
         className={cn({
           "flex flex-col flex-1 h-screen bg-gradient-gray-linear": true,

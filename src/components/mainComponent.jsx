@@ -50,14 +50,14 @@ function MainComponent({ Component, pageProps }) {
         <>
           {isQuizPage ? (
             <RootProvider>
-              <QuizLayout>
+              {/* <QuizLayout> */}
                 <Component {...pageProps} />
-                <div id="modal-group">
+                {/* <div id="modal-group">
                   <BackHomeConfirmModal />
                   <TerminateConfirmModal />
                   <AddToPlaylistModal />
-                </div>
-              </QuizLayout>
+                </div> */}
+              {/* </QuizLayout> */}
             </RootProvider>
 
           ) : (

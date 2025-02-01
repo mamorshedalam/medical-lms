@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ExitIcon from "../icons/ExitIcon";
-import { useNavigate } from "react-router-dom";
+// import ExitIcon from "../icons/ExitIcon";
+// import { useNavigate } from "react-router-dom";
 import { Switch } from "@headlessui/react";
 import { format } from "date-fns";
-import { Spinner } from "../icons/Spinner";
-import ConfirmModal from "../common/ConfirmModal";
+import { useRouter } from "next/router";
+// import { Spinner } from "../icons/Spinner";
+// import ConfirmModal from "../common/ConfirmModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,7 +24,7 @@ function ExamSidebar({
   sidebarLeft,
   setSidebar,
 }) {
-  const navigator = useNavigate();
+  const navigator = useRouter();
   const [totalTime, setTotalTime] = useState(1000);
   const [timeLeft, setTimeLeft] = useState(0);
   const [openModal, setOpenModal] = useState(false);

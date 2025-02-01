@@ -21,10 +21,13 @@ import { useAuth } from "@/providers/authProvider";
 import Spinner from "../../spinner";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useExam } from "@/providers/examProvider";
+import { useRouter } from "next/router";
 
 const CustomTestModal = () => {
   const authHttpClient = useAuthHttpClient();
   const { user } = useAuth();
+  const router = useRouter()
+
   const { loadQuestions } = useQuiz();
   const { setQuestions, showCreateTestModal, setShowCreateTestModal } =
     useExam();
@@ -139,20 +142,18 @@ const CustomTestModal = () => {
       );
       Toaster(ToastType.SUCCESS, "Test exam created successfully!");
       setIsSubmitting(false);
-
-      // updateQuizeState({
-      //   questions: response.data.data,
-      //   loadQuestions: fetchItem.data.data,
-      // });
-      // closeModal();
+      console.log('modeExam :>> ', modeExam);
       if (modeExam) {
-        router.push("/exam");
+        console.log('response.data :>> ', response.data);
         setQuestions(response.data.data);
-        setShowCreateTestModal(false);
+        closeModal();
+        router.push("/exam");
       } else {
         loadQuestions(response.data.data);
+        // closeModal();
+        // setOpened(false);
         router.push("/quiz");
-        setShowCreateTestModal(false);
+
       }
     } catch (error) {
       setIsSubmitting(false);

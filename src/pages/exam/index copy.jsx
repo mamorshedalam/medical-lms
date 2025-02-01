@@ -10,8 +10,6 @@ import ConfirmModal from "@/components/ui/ConfirmModal"
 import { useExam } from "@/providers/examProvider"
 import { useAuth } from "@/providers/authProvider"
 import useAuthHttpClient from "@/hooks/useAuthHttpClient"
-import ExamSidebar from "@/components/ui/exam/ExamSidebar"
-import ExamHeader from "@/components/ui/exam/ExamHeader"
 
 export default function ExamPage() {
     const router = useRouter()
@@ -55,7 +53,7 @@ export default function ExamPage() {
         if (dps.length > 0 || questions.length > 0) {
             if (dps.length === 0) setDpOrQuestion("question")
         } else {
-            // router.back()
+            router.back()
         }
     }, [questions, dps, router]) // Removed unnecessary dependencies: currentDp, currentQuestion
 
@@ -91,24 +89,24 @@ export default function ExamPage() {
                 throw new Error("Failed to save exam progress")
             }
             setResumeSession(payload)
-            // router.back()
+            router.back()
         } catch (error) {
             alert("Something went wrong when saving the progress")
         }
     }
 
-    console.log('questions :>> ', questions);
-    // if ((questions.length < 1 && dps.length < 1) || (!dps && !questions)) return null
+    if ((questions.length < 1 && dps.length < 1) || (!dps && !questions)) return null
+
     return (
         <div className="overflow-x-hidden">
-            <ExamHeader progress={progress} setOpenModal={setOpenModal} isSubmitting={isSubmitting} />
+            {/* <ExamHeader progress={progress} setOpenModal={setOpenModal} isSubmitting={isSubmitting} /> */}
             <div className="flex flex-col h-[100vh-100px]">
                 <div className="relative flex-1">
                     <div
                         className={`${sidebarLeft ? "lg:left-0" : "lg:right-0"
                             } lg:w-72 hidden bg-white lg:absolute lg:inset-y-0 lg:z-2 lg:flex lg:flex-col`}
                     >
-                        <ExamSidebar
+                        {/* <ExamSidebar
                             isSubmitting={isSubmitting}
                             dps={dps}
                             questions={questions}
@@ -121,7 +119,7 @@ export default function ExamPage() {
                             setEnd={setEnd}
                             sidebarLeft={sidebarLeft}
                             setSidebar={setSidebar}
-                        />
+                        /> */}
                     </div>
                     <div className={`${sidebarLeft ? "lg:pl-72" : "lg:pr-72"} h-[calc(100vh-100px)] overflow-auto`}>
                         {dpOrQuestion === "dp" && dps?.length > 0 && (

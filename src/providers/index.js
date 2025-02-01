@@ -1,13 +1,14 @@
-import { AuthProvider } from "./authProvider";
+// import { AuthProvider } from "./authProvider";
 import { CardProvider } from "./cardProvider";
 import { ExamContextProvider } from "./examProvider";
 import { DataProvider } from "./learningDataProvider";
 import { NotificationProvider } from "./notificationProvider";
 import { QuizContextProvider } from "./quizProvider";
+import { AuthProvider } from "@/providers/authProvider";
 
 const RootProvider = (props) => {
   return (
-    // <AuthProvider>
+    <AuthProvider>
       <QuizContextProvider>
         <DataProvider>
           <ExamContextProvider>
@@ -17,7 +18,7 @@ const RootProvider = (props) => {
           </ExamContextProvider>
         </DataProvider>
       </QuizContextProvider>
-    // </AuthProvider>
+    </AuthProvider>
   );
 };
 

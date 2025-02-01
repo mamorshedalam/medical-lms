@@ -1,6 +1,7 @@
 import { format } from "date-fns";
-import { Spinner } from "flowbite-react";
+// import { Spinner } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import Spinner from "../spinner";
 
 export default function ExamHeader({ progress, setOpenModal, isSubmitting }) {
   const [timeSpan, setTimeSpan] = useState(0);
@@ -68,7 +69,7 @@ export default function ExamHeader({ progress, setOpenModal, isSubmitting }) {
         }}
       >
         <span className="text-white font-semibold">
-          {isSubmitting ? <Spinner small center /> : "Terminer"}
+          {isSubmitting ? <Spinner size="sm" /> : "Terminer"}
         </span>
       </div>
     </div>
