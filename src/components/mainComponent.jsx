@@ -47,18 +47,13 @@ function MainComponent({ Component, pageProps }) {
   return (
     <>
       {isAuthenticated ? (
-        <>
+        <RootProvider>
           {isQuizPage ? (
-            <RootProvider>
+            <>
               {/* <QuizLayout> */}
-                <Component {...pageProps} />
-                {/* <div id="modal-group">
-                  <BackHomeConfirmModal />
-                  <TerminateConfirmModal />
-                  <AddToPlaylistModal />
-                </div> */}
+              <Component {...pageProps} />
               {/* </QuizLayout> */}
-            </RootProvider>
+            </>
 
           ) : (
             <MainLayout>
@@ -70,7 +65,7 @@ function MainComponent({ Component, pageProps }) {
               </div>
             </MainLayout>
           )}
-        </>
+        </RootProvider>
       ) : (
         <Component {...pageProps} />
       )}

@@ -19,7 +19,7 @@ export default function ExamHeader({ progress, setOpenModal, isSubmitting }) {
     }, 100);
   }, []);
   return (
-    <div className="w-[100vw] h-[100px] flex items-center border-b-2">
+    <div className="w-[100vw] h-[100px] flex items-center border-b-2 bg-white">
       <div className="w-[15vw] flex justify-center h-full items-center border-r-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"

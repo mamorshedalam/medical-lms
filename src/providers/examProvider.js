@@ -1,7 +1,5 @@
-import { createContext, useContext, useState } from "react";
-// import useAuthHttpClient from "../hooks/useAuthHttpClient";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "@/providers/authProvider";
-import { useEffect } from "react";
 import { HttpStatusCode } from "axios";
 import { useQuiz } from "../hooks/useQuiz";
 import { useRouter } from "next/router";

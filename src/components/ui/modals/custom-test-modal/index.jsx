@@ -29,8 +29,7 @@ const CustomTestModal = () => {
   const router = useRouter()
 
   const { loadQuestions } = useQuiz();
-  const { setQuestions, showCreateTestModal, setShowCreateTestModal } =
-    useExam();
+  const { setQuestions, showCreateTestModal, setShowCreateTestModal } = useExam();
   const [libraryState, setLibraryState] = useAtom(libraryAtom);
   const [openState, setOpenState] = useAtom(modal); // Get the current state of the modal
   const [opened, setOpened] = useState(false);
@@ -52,7 +51,6 @@ const CustomTestModal = () => {
   useEffect(() => {
     openState && setOpened(openState.customTest);
   }, [openState]);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,15 +140,13 @@ const CustomTestModal = () => {
       );
       Toaster(ToastType.SUCCESS, "Test exam created successfully!");
       setIsSubmitting(false);
-      console.log('modeExam :>> ', modeExam);
       if (modeExam) {
-        console.log('response.data :>> ', response.data);
         setQuestions(response.data.data);
         closeModal();
         router.push("/exam");
       } else {
         loadQuestions(response.data.data);
-        // closeModal();
+        closeModal();
         // setOpened(false);
         router.push("/quiz");
 

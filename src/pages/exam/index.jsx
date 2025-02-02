@@ -1,12 +1,9 @@
 "use client"
-
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-// import ExamSidebar from "@/components/exam/ExamSidebar"
 import QuestionCardSimple from "@/components/ui/exam/QuestionCardSimple"
 import DpCardSimple from "@/components/ui/exam/DpCardSimple"
 import ConfirmModal from "@/components/ui/ConfirmModal"
-// import ExamHeader from "@/components/exam/ExamHeader"
 import { useExam } from "@/providers/examProvider"
 import { useAuth } from "@/providers/authProvider"
 import useAuthHttpClient from "@/hooks/useAuthHttpClient"
@@ -55,7 +52,7 @@ export default function ExamPage() {
         if (dps.length > 0 || questions.length > 0) {
             if (dps.length === 0) setDpOrQuestion("question")
         } else {
-            // router.back()
+            router.back()
         }
     }, [questions, dps, router]) // Removed unnecessary dependencies: currentDp, currentQuestion
 
@@ -91,18 +88,17 @@ export default function ExamPage() {
                 throw new Error("Failed to save exam progress")
             }
             setResumeSession(payload)
-            // router.back()
+            router.back()
         } catch (error) {
             alert("Something went wrong when saving the progress")
         }
     }
 
-    console.log('questions :>> ', questions);
     // if ((questions.length < 1 && dps.length < 1) || (!dps && !questions)) return null
     return (
         <div className="overflow-x-hidden">
             <ExamHeader progress={progress} setOpenModal={setOpenModal} isSubmitting={isSubmitting} />
-            <div className="flex flex-col h-[100vh-100px]">
+            <div className="flex flex-col h-[100vh-100px] bg-white text-black">
                 <div className="relative flex-1">
                     <div
                         className={`${sidebarLeft ? "lg:left-0" : "lg:right-0"
@@ -148,7 +144,7 @@ export default function ExamPage() {
             <div className="fixed bottom-[25px] right-[50px] m-4">
                 <div className="with-tooltip relative flex items-center justify-center">
                     <button
-                        className="w-[4rem] h-[4rem] bg-black text-white rounded transition duration-300 rounded-full"
+                        className="w-[4rem] h-[4rem] bg-black text-white transition duration-300 rounded-full"
                         onClick={saveExam}
                     >
                         <svg
