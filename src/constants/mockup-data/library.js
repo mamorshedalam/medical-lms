@@ -313,25 +313,25 @@ export const sessionTypes = [
 export const annalesTypes = [
   { name: "Library", value: "library" },
   { name: "Annales", value: "annales" },
-  { name: "Both", value: "both" },
+  { name: "Both", value: "Both" },
 ];
 
 export const rangTypes = [
   { name: "A", value: "a" },
   { name: "B", value: "b" },
-  { name: "All", value: "all" },
+  { name: "All", value: "All" },
 ];
 
 export const successTypes = [
   { name: "Succeeded", value: "succeeded" },
   { name: "Failed", value: "failed" },
-  { name: "Any", value: "any" },
+  { name: "All", value: "all" },
 ];
 
 export const historyType = [
   { name: "Tried", value: "tried" },
   { name: "Never tried", value: "never_tried" },
-  { name: "Both", value: "both" },
+  { name: "Both", value: "Both" },
 ];
 
 export const itemOptions = [

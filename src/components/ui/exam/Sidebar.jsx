@@ -1,12 +1,17 @@
+import ExitIcon from "@/assets/icons/ExitIcon";
+import { useExam } from "@/providers/examProvider";
+import { useRouter } from "next/router";
 import React from "react";
 import Question from "./Question";
-import ExitIcon from "../icons/ExitIcon";
-import { useNavigate } from "react-router-dom";
-import { useExam } from "../../providers/examProvider";
+// import Question from "./Question";
+// import ExitIcon from "../icons/ExitIcon";
+// import { useNavigate } from "react-router-dom";
+// import { useExam } from "../../providers/examProvider";
 
 function Sidebar({ currentQuestion, setQuestion, questions, closeSideBar }) {
   const { submitAnswers } = useExam();
-  const navigator = useNavigate();
+  const navigator = useRouter();
+
   return (
     <div className="flex flex-col h-full">
       <div className="text-center text-white p-8 pb-4 font-bold text-lg">
@@ -36,7 +41,7 @@ function Sidebar({ currentQuestion, setQuestion, questions, closeSideBar }) {
         >
           TERMINER
         </div>
-        <button onClick={() => navigator(-1)}>
+        <button onClick={() => navigator.back()}>
           <ExitIcon />
         </button>
       </div>

@@ -1,9 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { useAuth } from "@/providers/authProvider";
+import { createContext, useContext, useState } from "react";
+import useAuthHttpClient from "../hooks/useAuthHttpClient";
+import { useAuth } from "./authProvider";
+import { useEffect } from "react";
 import { HttpStatusCode } from "axios";
 import { useQuiz } from "../hooks/useQuiz";
 import { useRouter } from "next/router";
-import useAuthHttpClient from "@/hooks/useAuthHttpClient";
 
 export const ExamContextProvider = (props) => {
   const navigator = useRouter();
@@ -132,7 +133,7 @@ export const ExamContextProvider = (props) => {
       if (doingLastSession) {
         deleteLastSession();
       }
-      navigator("/result/");
+      navigator.push("/result");
     } catch (e) {
       console.log(e);
       setIsSubmitting(false);

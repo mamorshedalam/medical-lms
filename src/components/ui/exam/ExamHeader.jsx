@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-// import { Spinner } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import Spinner from "../spinner";
 
@@ -63,7 +62,7 @@ export default function ExamHeader({ progress, setOpenModal, isSubmitting }) {
         <span>Durée: {format(timeSpan, "mm:ss")}</span>
       </div>
       <div
-        className="bg-[#E2959A] h-full w-[12vw] flex items-center justify-center ml-12 cursor-pointer"
+        className="bg-primary h-full w-[12vw] flex items-center justify-center ml-12 cursor-pointer"
         onClick={() => {
           setOpenModal(true);
         }}

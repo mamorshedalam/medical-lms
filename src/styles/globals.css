@@ -201,3 +201,15 @@ div[data-tag="allowRowEvents"] {
 .input-transition{
   transition: border-color 0.3s ease-in-out;
 }
+
+.tooltip-text {
+  transition: all 0.2s ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.with-tooltip:hover .tooltip-text {
+  visibility: visible;
+
+  opacity: 1;
+}

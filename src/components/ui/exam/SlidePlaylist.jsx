@@ -1,14 +1,14 @@
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon, PlusIcon, CheckIcon } from "@heroicons/react/24/outline";
-import Label from "../common/Label";
-import Check from "../common/Check";
+import useAuthHttpClient from "@/hooks/useAuthHttpClient";
+import { useAuth } from "@/providers/authProvider";
+import { useQuiz } from "@/hooks/useQuiz";
+import { useNotification } from "@/providers/notificationProvider";
+import Check from "./Check";
+import Label from "./Label";
+import Spinner from "../spinner";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import useAuthHttpClient from "../../hooks/useAuthHttpClient";
-import { useAuth } from "../../providers/authProvider";
-import { Spinner, TinySpinner } from "../icons/Spinner";
-import { useQuiz } from "../../hooks/useQuiz";
-import { useNotification } from "../../providers/notificationProvider";
 
 const colors = [
   "primary",
@@ -264,7 +264,7 @@ function SlidePlaylist({ open, setOpen }) {
                                     className="w-4 h-4 [&>path]:stroke-[3] hover:cursor-pointer"
                                   />
                                   {creating ? (
-                                    <TinySpinner />
+                                    <Spinner size="sm" />
                                   ) : (
                                     <CheckIcon
                                       onClick={() => {
@@ -323,7 +323,7 @@ function SlidePlaylist({ open, setOpen }) {
                         }}
                         className="px-4 py-2 bg-primary-600 text-white rounded-lg flex min-w-fit"
                       >
-                        {applying && <Spinner small />}Apply
+                        {applying && <Spinner size="small" />}Apply
                       </button>
                     </div>
                   </div>

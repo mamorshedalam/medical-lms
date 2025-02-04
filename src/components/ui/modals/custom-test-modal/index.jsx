@@ -1,14 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
-
-import { libraryAtom, modal, updateLibraryState, updateQuizeState } from "@/store/store";
+import { modal } from "@/store/store";
 import { useAtom } from "jotai";
 import Dropdown from "../../dropdown";
-import {
-  historyType,
-  rangTypes,
-  sessionTypes,
-  successTypes,
-} from "@/constants/mockup-data/library";
+import { historyType, rangTypes, sessionTypes, successTypes } from "@/constants/mockup-data/library";
 import Segmented from "../../Segmented";
 import NumberInput from "../../number-input";
 import TogglerOne from "../../togglers/toggler-one";
@@ -22,6 +16,7 @@ import Spinner from "../../spinner";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useExam } from "@/providers/examProvider";
 import { useRouter } from "next/router";
+import { useData } from "@/providers/learningDataProvider";
 
 const CustomTestModal = () => {
   const authHttpClient = useAuthHttpClient();
@@ -29,55 +24,74 @@ const CustomTestModal = () => {
   const router = useRouter()
 
   const { loadQuestions } = useQuiz();
-  const { setQuestions, showCreateTestModal, setShowCreateTestModal } = useExam();
-  const [libraryState, setLibraryState] = useAtom(libraryAtom);
-  const [openState, setOpenState] = useAtom(modal); // Get the current state of the modal
+  const { setQuestions } = useExam();
+  const { matieres, items, tags } = useData();
+  const [openState, setOpenState] = useAtom(modal);
   const [opened, setOpened] = useState(false);
-  const [query, setQuery] = useState("");
+  const [currentSelectedMatieres, setCurrentSelectedMatieres] = useState([]);
+  const [currentSelectedItems, setCurrentSelectedItems] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  const [selectedMatieres, setSelectedMatieres] = useState([])
-  const [selectedItems, setSelectedItems] = useState([])
-  const [selectedTags, setSelectedTags] = useState([])
-  const [rank, setRank] = useState("all");
-  const [history, setHistory] = useState("both");
-  const [difficulty, setDifficulty] = useState("any");
-  const [sessionType, setSessionType] = useState("all");
+  const [rank, setRank] = useState("All");
+  const [history, setHistory] = useState("Both");
   const [n_questions, setN_questions] = useState(0);
   const [total_questions, setTotalQuestions] = useState(0);
   const [modeExam, setEnabled] = useState(false);
+  const [matiereQuery, setMatiereQuery] = useState("");
+  const [difficulty, setDifficulty] = useState("all");
+
+  const [itemQuery, setItemQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [counting, setCounting] = useState(false);
+  const [tagQuery, setTagQuery] = useState("");
+  const [sessionType, setSessionType] = useState("All");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     openState && setOpened(openState.customTest);
   }, [openState]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (authHttpClient) {
-        setLoading(true);
-        try {
-          const [fetchMatiere, fetchItem, fetchTag] = await Promise.all([
-            authHttpClient.get("/matiere"),
-            authHttpClient.get("/item"),
-            authHttpClient.get("/tag"),
-          ]);
-          updateLibraryState({
-            materialsAtom: fetchMatiere.data.data,
-            itemsAtom: fetchItem.data.data,
-            tagsAtom: fetchTag.data.data,
-            isRenderingData: false
-          });
-        } catch (err) {
-          console.log(err);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-    fetchData();
-  }, []);
 
+  useEffect(() => {
+    console.log(total_questions);
+    setN_questions(total_questions);
+  }, [total_questions]);
+
+  useEffect(() => {
+    if (currentSelectedItems.length == 0) {
+      setTotalQuestions(0);
+      return;
+    }
+    const countQuestions = async () => {
+      setCounting(true);
+      const response = await authHttpClient.post("/question/countMultiple", {
+        user_id: user._id,
+        matieres_id: currentSelectedMatieres,
+        items_id: currentSelectedItems,
+        tags: selectedTags.map((tag) => tag._id),
+        history,
+        rang: rank,
+        difficulty,
+      });
+      setTotalQuestions(response.data.data);
+      setCounting(false);
+    };
+    countQuestions();
+  }, [rank, history, selectedTags, currentSelectedItems, currentSelectedMatieres, user, difficulty]);
+
+  /**
+   *  When a matiere is selected, select all items related to that matiere.
+   */
+  useEffect(() => {
+    let aux_selected_items = [...currentSelectedItems];
+
+    for (let item of items) {
+      if (aux_selected_items.includes(item._id)) continue;
+      if (!currentSelectedMatieres.includes(item.matiere_id)) continue;
+
+      aux_selected_items.push(item._id);
+    }
+    setCurrentSelectedItems(aux_selected_items);
+  }, [currentSelectedMatieres]);
 
   const closeModal = () => {
     setOpened(false);
@@ -85,37 +99,25 @@ const CustomTestModal = () => {
   };
 
   const filteredMatieres = React.useMemo(() => {
-    if (!libraryState?.materialsAtom) return [];
-
-    return libraryState.materialsAtom.map(matiere => ({
-      name: matiere.name,
-      value: matiere._id
-    })).filter(matiere =>
-      query === "" || matiere.name.toLowerCase().includes(query.toLowerCase())
+    if (matieres.length === 0) return [];
+    return matieres.map(matiere => ({ name: matiere.name, value: matiere._id })).filter(matiere =>
+      matiereQuery === "" || matiere.name.toLowerCase().includes(matiereQuery.toLowerCase())
     );
-  }, [libraryState?.materialsAtom, query]);
+  }, [matieres, matiereQuery]);
 
   const filteredItems = React.useMemo(() => {
-    if (!libraryState?.itemsAtom) return [];
-
-    return libraryState.itemsAtom.map(item => ({
-      name: item.name,
-      value: item._id
-    })).filter(item =>
-      query === "" || item.name.toLowerCase().includes(query.toLowerCase())
+    if (items.length === 0) return [];
+    return items.map(item => ({ name: item.name, value: item._id })).filter(item =>
+      itemQuery === "" || item.name.toLowerCase().includes(itemQuery.toLowerCase())
     );
-  }, [libraryState?.materialsAtom, query]);
+  }, [items, query]);
 
   const filteredTags = React.useMemo(() => {
-    if (!libraryState?.tagsAtom) return [];
-
-    return libraryState.tagsAtom.map(tag => ({
-      name: tag.name,
-      value: tag._id
-    })).filter(tag =>
-      query === "" || tag.name.toLowerCase().includes(query.toLowerCase())
+    if (tags.length === 0) return [];
+    return tags.map(tag => ({ name: tag.name, value: tag._id })).filter(tag =>
+      tagQuery === "" || tag.name.toLowerCase().includes(tagQuery.toLowerCase())
     );
-  }, [libraryState?.materialsAtom, query]);
+  }, [tags, query]);
 
 
   const handleSubmit = async () => {
@@ -129,8 +131,8 @@ const CustomTestModal = () => {
         "/question/filterRandomMultiple",
         {
           user_id: user._id,
-          matieres_id: selectedMatieres,
-          items_id: selectedItems,
+          matieres_id: currentSelectedMatieres,
+          items_id: currentSelectedItems,
           n_questions: n_questions,
           tags: selectedTags,
           history: history,
@@ -147,7 +149,6 @@ const CustomTestModal = () => {
       } else {
         loadQuestions(response.data.data);
         closeModal();
-        // setOpened(false);
         router.push("/quiz");
 
       }
@@ -197,8 +198,8 @@ const CustomTestModal = () => {
                 <Dropdown
                   className="w-full"
                   options={filteredMatieres}
-                  selected={selectedMatieres}
-                  setSelected={setSelectedMatieres}
+                  selected={currentSelectedMatieres}
+                  setSelected={setCurrentSelectedMatieres}
                   placeholder="Select Matières"
                 />
               </div>
@@ -208,8 +209,8 @@ const CustomTestModal = () => {
                 <Dropdown
                   className="w-full"
                   options={filteredItems}
-                  selected={selectedItems}
-                  setSelected={setSelectedItems}
+                  selected={currentSelectedItems}
+                  setSelected={setCurrentSelectedItems}
                   placeholder="Select Item"
                 />
               </div>

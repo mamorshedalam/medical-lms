@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Spinner from "./ui/spinner";
 import RootProvider from "@/providers";
+import Notification from "./ui/Notification";
 
 function MainComponent({ Component, pageProps }) {
 
@@ -35,7 +36,7 @@ function MainComponent({ Component, pageProps }) {
       </div>
     );
 
-  const isQuizPage = /(quiz|exam|test)/i.test(router.asPath);
+  const isQuizPage = /(quiz|exam|test|result)/i.test(router.asPath);
 
   // if (error)
   //   return (
@@ -65,11 +66,13 @@ function MainComponent({ Component, pageProps }) {
               </div>
             </MainLayout>
           )}
+           <Notification />
         </RootProvider>
       ) : (
         <Component {...pageProps} />
       )}
       <ToastContainer stacked closeOnClick draggable />
+      
     </>
   );
 }

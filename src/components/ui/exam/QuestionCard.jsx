@@ -1,32 +1,31 @@
-import React, { useEffect } from "react";
-
-import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
-
-import { useState } from "react";
-import Label from "../common/Label";
+import React, { useEffect, useState } from "react";
+import Label from "./Label";
 import Choice from "./Choice";
-import Speedometer from "../icons/Speedometer";
-import ShareIcon from "../icons/ShareIcon";
-import Heart from "../icons/Heart";
-import InfoIcon from "../icons/InfoIcon";
-import InfoCircle from "../icons/InfoCircle";
-
 import ShareLinkModal from "./ShareLinkModal";
 import SlidePlaylist from "./SlidePlaylist";
 import SlideReport from "./SlideReport";
-import useAuthHttpClient from "../../hooks/useAuthHttpClient";
-import { useAuth } from "../../providers/authProvider";
-import { useCard } from "../../providers/cardProvider";
-import { useQuiz } from "../../hooks/useQuiz";
-import { useNotification } from "../../providers/notificationProvider";
-import CustomImage from "../common/CustomImage";
+import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
+import InfoCircle from "@/assets/icons/InfoCircle";
+import { useAuth } from "@/providers/authProvider";
+import useAuthHttpClient from "@/hooks/useAuthHttpClient";
+import { useQuiz } from "@/hooks/useQuiz";
+import CustomImage from "./CustomImage";
+import Speedometer from "@/assets/icons/Speedometer";
+import InfoIcon from "@/assets/icons/InfoIcon";
+import ShareIcon from "@/assets/icons/ShareIcon";
+import Heart from "@/assets/icons/Heart";
+import { useCard } from "@/providers/cardProvider";
+import { useNotification } from "@/providers/notificationProvider";
+import Spinner from "../spinner";
 
 function QuestionCard({ question: _question, setQuestions, index, next }) {
-  const { setCurrentQuestion, questionToShare, setQuestionToShare } = useQuiz();
-  const { user } = useAuth();
   const authHttpClient = useAuthHttpClient();
-  const [question, setQuestion] = useState(_question);
+  const { user } = useAuth();
   const { showCard } = useCard();
+  const [question, setQuestion] = useState(_question);
+  const { setCurrentQuestion, questionToShare, setQuestionToShare } = useQuiz();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     setQuestion(_question);
   }, [_question]);
@@ -56,7 +55,6 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
     textColor = "text-red-dark";
     bgColor = "bg-red-bg";
   }
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const submitAnswer = async () => {
     console.log(_question.type, answer);
     setIsSubmitting(true);
@@ -92,8 +90,8 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
           answeredQuestion.result.yourAnswer = answer;
           break;
       }
-      console.log(answeredQuestion);
-      setQuestion(answeredQuestion);
+
+
       setQuestions((questions) => [
         ...questions.slice(0, index),
         answeredQuestion,
@@ -130,14 +128,14 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
 
   return (
     <>
-      <div className="bg-white h-screen py-16 px-4 md:px-16 flex justify-center items-center">
-        <div className="lg:w-5/6 h-full flex flex-col overflow-hidden shadow-lg shadow-gray-700 rounded-xl">
+      <div className="bg-white text-black h-screen py-16 px-4 md:px-16 flex justify-center items-center">
+        <div className="lg:w-5/6 h-full flex flex-col overflow-hidden shadow-lg shadow-gray-300 rounded-xl">
           <div
             className={`border-2 ${borderColor} ${bgColor} ${textColor} rounded-t-xl px-12 py-3 flex justify-between`}
           >
             <Label colorInherit>
               Question {index + 1}
-              <span className="rounded bg-blue-light text-white ml-2 my-1 px-1 text-xs text-center">
+              <span className="rounded bg-primary text-white ml-2 my-1 px-1 text-xs text-center">
                 {question.level}
               </span>
             </Label>
@@ -149,7 +147,7 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
               (isImage(question.imageUrl) ? (
                 <CustomImage
                   src={
-                    process.env.REACT_APP_SERVER_URL + "/" + question.imageUrl
+                    process.env.NEXT_PUBLIC_API_URL + "/" + question.imageUrl
                   }
                   alt={"Visual clarification regarding the question"}
                   className="w-[350px] m-auto mb-10"
@@ -159,7 +157,7 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
                   className="w-[350px] m-auto mb-10"
                   controls
                   src={
-                    process.env.REACT_APP_SERVER_URL + "/" + question.imageUrl
+                    process.env.NEXT_PUBLIC_API_URL + "/" + question.imageUrl
                   }
                 />
               ))}
@@ -177,14 +175,14 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
                   }
                   clickAction={
                     question.result
-                      ? () => {}
+                      ? () => { }
                       : () => {
-                          setAnswer((prev) => {
-                            return prev.map((_, i) => {
-                              return i === idx ? !prev[i] : prev[i];
-                            });
+                        setAnswer((prev) => {
+                          return prev.map((_, i) => {
+                            return i === idx ? !prev[i] : prev[i];
                           });
-                        }
+                        });
+                      }
                   }
                   isRight={question.result?.choices[idx].correctAnswer}
                   desc={question.result?.choices[idx].desc}
@@ -194,11 +192,10 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
               <div className="px-16 mb-3">
                 {question.result ? (
                   <div
-                    className={`border-2 rounded-lg px-8 py-2 ${
-                      question.result.score === 20
-                        ? "bg-green-bg border-green-dark"
-                        : "bg-red-bg border-red-dark"
-                    }`}
+                    className={`border-2 rounded-lg px-8 py-2 ${question.result.score === 20
+                      ? "bg-green-bg border-green-dark"
+                      : "bg-red-bg border-red-dark"
+                      }`}
                   >
                     <div className="font-bold">
                       {question.result.yourAnswer}
@@ -214,10 +211,10 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
                     }
                     onChange={
                       question.result
-                        ? () => {}
+                        ? () => { }
                         : (e) => {
-                            setAnswer(e.target.value);
-                          }
+                          setAnswer(e.target.value);
+                        }
                     }
                   />
                 )}
@@ -306,12 +303,20 @@ function QuestionCard({ question: _question, setQuestions, index, next }) {
                 question.result
                   ? next
                   : () => {
-                      submitAnswer();
-                    }
+                    submitAnswer();
+                  }
               }
-              className="click-action px-8 py-4 text-lg bg-primary-600 rounded-lg text-white border-transparent border-2 hover:bg-primary-600"
+              disabled={isSubmitting}
+              className="click-action px-5 py-3 text-lg bg-primary rounded-lg text-white border-transparent border-2 hover:bg-primary inline-flex gap-2 items-center"
             >
-              {question.result ? "Suivant" : "Soumettre"}
+
+              {
+                isSubmitting && <Spinner size="sm" fillColor="white" />
+              }
+              {
+                isSubmitting ? <span>Submitting</span> : <span> {question.result ? "Suivant" : "Soumettre"}</span>
+              }
+
             </button>
           </div>
         </div>

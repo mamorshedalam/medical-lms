@@ -1,10 +1,9 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import useAuthHttpClient from "../../hooks/useAuthHttpClient";
-import { useAuth } from "../../providers/authProvider";
-import { Spinner } from "../icons/Spinner";
-
+import useAuthHttpClient from "@/hooks/useAuthHttpClient";
+import { useAuth } from "@/providers/authProvider";
+import Spinner from "../spinner";
 function SlideReport({ open, question_id, setOpen }) {
   const authHttpClient = useAuthHttpClient();
   const { user } = useAuth();
@@ -85,7 +84,7 @@ function SlideReport({ open, question_id, setOpen }) {
                           onClick={send}
                           className="px-4 py-2 bg-primary-600 text-white rounded-lg w-20 flex justify-center items-center"
                         >
-                          {sending ? <Spinner small center /> : "Send"}
+                          {sending ? <Spinner size="sm" /> : "Send"}
                         </button>
                       </div>
                     </div>

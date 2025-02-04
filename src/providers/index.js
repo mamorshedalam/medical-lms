@@ -1,4 +1,3 @@
-// import { AuthProvider } from "./authProvider";
 import { CardProvider } from "./cardProvider";
 import { ExamContextProvider } from "./examProvider";
 import { DataProvider } from "./learningDataProvider";

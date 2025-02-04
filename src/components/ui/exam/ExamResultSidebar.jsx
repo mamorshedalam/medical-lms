@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import ExitIcon from "../icons/ExitIcon";
-import { useNavigate } from "react-router-dom";
-import ConfirmModal from "../common/ConfirmModal";
+// import ConfirmModal from "../common/ConfirmModal";
+import ExitIcon from "@/assets/icons/ExitIcon";
+import { useRouter } from "next/router";
+import ConfirmModal from "../confirmModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -17,7 +18,7 @@ function ExamResultSidebar({
   dpOrQuestion,
   closeSideBar,
 }) {
-  const navigator = useNavigate();
+  const navigator = useRouter();
   const [openModal, setOpenModal] = useState(false);
   const clickHandle = () => {
     setOpenModal(true);
@@ -130,10 +131,10 @@ function ExamResultSidebar({
         content={"Do you want to exit?"}
         onConfirm={() => {
           if (result.isPastExam) {
-            navigator("/history");
+            navigator.push("/history");
             return;
           }
-          navigator("/");
+          navigator.push("/");
         }}
       />
     </div>

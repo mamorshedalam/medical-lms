@@ -22,39 +22,31 @@ export default function ExamPage() {
     const authHttpClient = useAuthHttpClient()
     const { user } = useAuth()
 
-    const number_of_questions =
-        dps.reduce((total, currentObj) => {
-            return total + (currentObj.questions ? currentObj.questions.length : 0)
-        }, 0) + questions.length
+    const number_of_questions = dps.reduce((total, currentObj) => {
+        return total + (currentObj.questions ? currentObj.questions.length : 0)
+    }, 0) + questions.length
 
-    const progress =
-        ((dps.reduce((total, currentObj) => {
-            return (
-                total +
-                (currentObj.questions
-                    ? currentObj.questions.reduce((qTotal, qCurrent) => {
-                        return qTotal + (qCurrent.userAnswer ? 1 : 0)
-                    }, 0)
-                    : 0)
-            )
-        }, 0) +
-            questions.reduce((qTotal, qCurrent) => {
-                return qTotal + (qCurrent.userAnswer ? 1 : 0)
-            }, 0)) *
-            100) /
-        number_of_questions
+    const progress = ((dps.reduce((total, currentObj) => {
+        return (
+            total +
+            (currentObj.questions
+                ? currentObj.questions.reduce((qTotal, qCurrent) => {
+                    return qTotal + (qCurrent.userAnswer ? 1 : 0)
+                }, 0)
+                : 0)
+        )
+    }, 0) + questions.reduce((qTotal, qCurrent) => {
+        return qTotal + (qCurrent.userAnswer ? 1 : 0)
+    }, 0)) * 100) / number_of_questions
 
     useEffect(() => {
         end && submitAnswers()
-    }, [end, submitAnswers])
+    }, [end])
+
 
     useEffect(() => {
-        if (dps.length > 0 || questions.length > 0) {
-            if (dps.length === 0) setDpOrQuestion("question")
-        } else {
-            router.back()
-        }
-    }, [questions, dps, router]) // Removed unnecessary dependencies: currentDp, currentQuestion
+        end && submitAnswers()
+    }, [end])
 
     const setAnswer = (answer) => {
         const tempQuestions = [...questions]
@@ -72,6 +64,14 @@ export default function ExamPage() {
             setCurrentQuestion(currentQuestion + 1)
         }
     }
+
+    useEffect(() => {
+        if (dps.length > 0 || questions.length > 0) {
+            if (dps.length === 0) setDpOrQuestion("question")
+        } else {
+            router.back()
+        }
+    }, [questions, dps, router])
 
     const saveExam = async () => {
         const payload = {
@@ -94,7 +94,8 @@ export default function ExamPage() {
         }
     }
 
-    // if ((questions.length < 1 && dps.length < 1) || (!dps && !questions)) return null
+    if ((questions.length < 1 && dps.length < 1) || (!dps && !questions)) return null;
+
     return (
         <div className="overflow-x-hidden">
             <ExamHeader progress={progress} setOpenModal={setOpenModal} isSubmitting={isSubmitting} />
@@ -144,7 +145,7 @@ export default function ExamPage() {
             <div className="fixed bottom-[25px] right-[50px] m-4">
                 <div className="with-tooltip relative flex items-center justify-center">
                     <button
-                        className="w-[4rem] h-[4rem] bg-black text-white transition duration-300 rounded-full"
+                        className="w-[4rem] h-[4rem] bg-primary text-white transition duration-300 rounded-full"
                         onClick={saveExam}
                     >
                         <svg

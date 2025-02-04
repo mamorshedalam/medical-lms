@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from "react";
-
-import Check from "../common/Check";
 import { Transition } from "@headlessui/react";
-import MessageAlertIcon from "../icons/MessageAlertIcon";
+import MessageAlertIcon from "@/assets/icons/MessageAlertIcon";
+import Check from "./Check";
 
 function Choice({
   label,
@@ -13,24 +12,39 @@ function Choice({
   answered,
   isRight,
 }) {
-  const { borderColor, bgColor } = answered
-    ? isRight
-      ? { borderColor: "border-green-dark", bgColor: "bg-green-bg" }
-      : checked
-      ? { borderColor: "border-red-dark", bgColor: "bg-red-bg" }
-      : { borderColor: "border-gray-300", bgColor: "bg-white" }
-    : { borderColor: "border-gray-300", bgColor: "bg-white" };
+  // const { borderColor, bgColor } = answered
+  //   ? isRight
+  //     ? { borderColor: "border-green-dark", bgColor: "bg-green-bg" }
+  //     : checked
+  //     ? { borderColor: "border-red-dark", bgColor: "bg-red-bg" }
+  //     : { borderColor: "border-gray-300", bgColor: "bg-white" }
+  //   : { borderColor: "border-gray-300", bgColor: "bg-white" };
 
   const [dropdown, setDropdown] = useState(false);
+
+  const getStyles = () => {
+    if (answered) {
+      return isRight
+        ? { borderColor: "border-green-500", bgColor: "bg-green-100" } 
+        : checked
+          ? { borderColor: "border-red-500", bgColor: "bg-red-100" } 
+          : { borderColor: "border-gray-300", bgColor: "bg-white" };
+    }
+    return checked
+      ? { borderColor: "border-blue-500", bgColor: "bg-blue-100" } // Selection before submitting
+      : { borderColor: "border-gray-300", bgColor: "bg-white" };
+  };
+
+  const { borderColor, bgColor } = getStyles();
+
   return (
     <div className="px-12 pb-3">
       <div
-        className={`border-2 ${borderColor} ${bgColor} px-4 py-2 flex ${
-          dropdown ? "rounded-t-lg border-b-0" : "rounded-lg"
-        }`}
+        className={`border-[1px] ${borderColor} ${bgColor} px-4 py-2 flex ${dropdown ? "rounded-t-lg border-b-0" : "rounded-lg"
+          }`}
       >
         <div className="flex-1 flex gap-3">
-          <span className="bg-gray-200 w-6 h-6 rounded-full text-gray-400 px-1 text-center font-bold">
+          <span className={`w-6 h-6 rounded-full px-1 text-center font-bold bg-gray-200 text-gray-400`}>
             {label}
           </span>
           <div className="flex gap-3" onClick={clickAction}>

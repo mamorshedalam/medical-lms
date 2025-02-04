@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
-
-import Label from "../common/Label";
 import Choice from "./Choice";
-import Speedometer from "../icons/Speedometer";
-import ShareIcon from "../icons/ShareIcon";
-import Heart from "../icons/Heart";
-import InfoIcon from "../icons/InfoIcon";
-import InfoCircle from "../icons/InfoCircle";
-
+import Speedometer from "@/assets/icons/Speedometer";
+import ShareIcon from "@/assets/icons/ShareIcon";
+import Heart from "@/assets/icons/Heart";
+import InfoIcon from "@/assets/icons/InfoIcon";
+import InfoCircle from "@/assets/icons/InfoCircle";
 import ShareLinkModal from "./ShareLinkModal";
 import SlidePlaylist from "./SlidePlaylist";
 import SlideReport from "./SlideReport";
-import { useCard } from "../../providers/cardProvider";
-import { useQuiz } from "../../hooks/useQuiz";
-import { useNotification } from "../../providers/notificationProvider";
 import { differenceInDays } from "date-fns";
-import CustomImage from "../common/CustomImage";
+import CustomImage from "./CustomImage";
+import Label from "./Label";
+import { useCard } from "@/providers/cardProvider";
+import { useNotification } from "@/providers/notificationProvider";
+import { useQuiz } from "@/hooks/useQuiz";
 
 function QuestionResultCard({
   dpOrQuestion,
@@ -29,8 +27,7 @@ function QuestionResultCard({
   dp,
   isFromDp,
 }) {
-  const { setCurrentQuestion, setQuestionToShare, isShareDp, setIsShareDp } =
-    useQuiz();
+  const { setCurrentQuestion, setQuestionToShare, isShareDp, setIsShareDp } = useQuiz();
   const { showCard } = useCard();
   var bgColor, borderColor, textColor;
   if (!question?.userAnswer) {
@@ -68,25 +65,22 @@ function QuestionResultCard({
   };
   const showStatistics = () => {
     showNotification(
-      `Last attempted : ${
-        question.lastAttempt
-          ? `${differenceInDays(
-              Date.now(),
-              new Date(question.lastAttempt)
-            )}days ago`
-          : ""
+      `Last attempted : ${question.lastAttempt
+        ? `${differenceInDays(
+          Date.now(),
+          new Date(question.lastAttempt)
+        )}days ago`
+        : ""
       }
-      Last score : ${
-        question.lastScore !== undefined
-          ? `${question.lastScore}/${question.total_score}`
-          : ""
+      Last score : ${question.lastScore !== undefined
+        ? `${question.lastScore}/${question.total_score}`
+        : ""
       }
-      Success rate : ${
-        question.statistics.total
-          ? Math.round(
-              (question.statistics.success / question.statistics.total) * 100
-            )
-          : 0
+      Success rate : ${question.statistics.total
+        ? Math.round(
+          (question.statistics.success / question.statistics.total) * 100
+        )
+        : 0
       }% of users score 20/20`
     );
   };
@@ -157,11 +151,10 @@ function QuestionResultCard({
             {question.__t === "ShortAnswer" &&
               (question.user_score !== undefined ? (
                 <div
-                  className={`border-2 rounded-lg mx-16 px-8 py-2 ${
-                    question.user_score === 20
+                  className={`border-2 rounded-lg mx-16 px-8 py-2 ${question.user_score === 20
                       ? "bg-green-bg border-green-dark"
                       : "bg-red-bg border-red-dark"
-                  }`}
+                    }`}
                 >
                   <div className="font-bold">{question.userAnswer}</div>
                   <div>{question.answers.join(", ")}</div>
@@ -172,7 +165,7 @@ function QuestionResultCard({
                     className="w-full block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
                     type="text"
                     value={question.userAnswer}
-                    onChange={() => {}}
+                    onChange={() => { }}
                   />
                 </div>
               ))}

@@ -1,14 +1,20 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import CopyIcon from "../icons/CopyIcon";
-import { useQuiz } from "../../hooks/useQuiz";
+import CopyIcon from "@/assets/icons/CopyIcon";
+import { useQuiz } from "@/hooks/useQuiz";
+import { Toaster, ToastType } from "../toaster";
 
 function ShareLinkModal({ open, setOpen }) {
   const { currentQuestion, questionToShare, isShareDp } = useQuiz();
-  const linkToShare = `${process.env.REACT_APP_URL}/quiz/${
-    questionToShare._id
-  }${isShareDp ? "/dp" : ""}`;
+  const linkToShare = `${process.env.NEXT_PUBLIC_URL}/quiz/${questionToShare._id
+    }${isShareDp ? "/dp" : ""}`;
+
+  const copyToClipBoard = () => {
+    navigator.clipboard.writeText(linkToShare);
+    Toaster(ToastType.SUCCESS, "Share link to clipboard");
+    setOpen(false);
+  }
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -62,15 +68,13 @@ function ShareLinkModal({ open, setOpen }) {
                     </div>
                   </div>
                 </div>
-                <div className="px-2 mt-2">Share link</div>
+                <div className="px-2 mt-2 text-black">Share link</div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="flex-1 border-2 border-solid rounded-lg px-2 py-1 overflow-auto inline-flex whitespace-nowrap text-primary-700 [&::-webkit-scrollbar]:hidden">
+                  <p className="flex-1 border border-solid rounded-lg px-2 py-1 overflow-auto inline-flex whitespace-nowrap text-primary [&::-webkit-scrollbar]:hidden">
                     {linkToShare}
                   </p>
                   <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(linkToShare);
-                    }}
+                    onClick={() => copyToClipBoard()}
                     className="text-gray-400 hover:cursor-pointer px-2 hover:text-gray-700 active:text-primary-700"
                   >
                     <CopyIcon className="text-gray-200" />
